@@ -1,0 +1,268 @@
+/* Common page setup */
+body {
+    background:
+        linear-gradient(rgba(137, 197, 237, 0.9), #bfdeeae6),
+        url('./images/pickles.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    line-height: 1.6;
+}
+
+/* Headers */
+h1, h2, h3 {
+    color: #333;
+}
+
+/* Admin form */
+.admin-form {
+    background-color: rgba(224, 83, 221, 0.95);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    margin: 30px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #f9f9f9;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #eae9e9;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Buttons */
+button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.add-btn {
+    background-color: #e76209;
+    color: #fff;
+}
+
+.add-btn:hover {
+    background-color: #efb0d7;
+}
+
+.checkout-btn {
+    background-color: #0be43e;
+    color: rgb(228, 27, 27);
+}
+
+.checkout-btn:hover {
+    background-color: #e50f0f;
+}
+
+.delete-btn {
+    background-color: #45ee16;
+    color: rgb(9, 9, 9);
+}
+
+.delete-btn:hover {
+    background-color: #e11212;
+}
+
+.nav-link {
+    display: inline-block;
+    margin-top: 20px;
+    color: #0a090a;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.nav-link:hover {
+    text-decoration: underline;
+}
+
+/* Product grid */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.product-card {
+    background-color: rgba(239, 243, 242, 0.95);
+    border: 1px solid #eae6e6;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    backdrop-filter: blur(2px);
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+}
+
+.product-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+/* Cart sidebar */
+.cart-sidebar {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 350px;
+    height: 100%;
+    background: white;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.2);
+    padding: 20px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.cart-item {
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+}
+
+.cart-toggle {
+    position: fixed;
+    right: 20px;
+    top: 20px;
+    background-color: #ff9900;
+    color: white;
+    border-radius: 50px;
+    padding: 10px 20px;
+    font-weight: bold;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    cursor: pointer;
+}
+
+/* Search bar */
+.search-bar {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.search-bar input {
+    width: 60%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 20px;
+    border: 1px solid #0923ed;
+}
+/* Edit Button */
+.edit-btn {
+    background-color: #60f465; /* Amber */
+    color: #cf1818;
+}
+
+.edit-btn:hover {
+    background-color: #7abce9;
+}
+
+/* Filter Buttons */
+.product-filters button {
+    padding: 10px 15px;
+    margin: 0 5px;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.product-filters button:nth-child(1) {
+    background-color: #39f53c; /* Blue */
+    color: rgb(7, 7, 7);
+}
+
+.product-filters button:nth-child(1):hover {
+    background-color: #e64a19;
+}
+
+.product-filters button:nth-child(2) {
+    background-color: #39f53c; /* Green */
+    color: rgb(7, 6, 6);
+}
+
+.product-filters button:nth-child(2):hover {
+    background-color: #e64a19;
+}
+
+.product-filters button:nth-child(3) {
+    background-color: #39f53c; /* Orange */
+    color: rgb(7, 6, 6);
+}
+
+.product-filters button:nth-child(3):hover {
+    background-color: #e64a19;
+}
+
+/* Save Product Button in Admin */
+.admin-form button {
+    background-color: #f50707; /* Purple */
+    color: white;
+}
+
+.admin-form button:hover {
+    background-color: #0bcee8;
+}
+/* Make product name bold and darker */
+.product-card h3 {
+    color: #111;
+    font-weight: bold;
+    font-size: 20px;
+    margin: 10px 0 5px;
+}
+
+/* Style the price to stand out */
+.product-card p strong {
+    color: #1a7f1a; /* dark green */
+    font-size: 17px;
+}
+
+/* Style the category as a badge */
+.category-tag {
+    display: inline-block;
+    background-color: #f2c94c;
+    color: #333;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: bold;
+    margin-top: 8px;
+}
+.cart-badge {
+    background: red;
+    color: white;
+    border-radius: 50%;
+    padding: 3px 8px;
+    font-size: 13px;
+    font-weight: bold;
+    vertical-align: top;
+    margin-left: 5px;
+}
+

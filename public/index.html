@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Products</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h1>Our Products</h1>
+    <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search products..." oninput="filterProducts('all')">
+    </div>
+
+    <div class="product-filters">
+        <button onclick="filterProducts('all')">All Products</button>
+        <button onclick="filterProducts('pickles')">Pickles</button>
+        <button onclick="filterProducts('snacks')">Snacks</button>
+    </div>
+
+    <div class="product-grid" id="productContainer">
+        <!-- Products will be loaded here -->
+    </div>
+
+    <div class="cart-toggle" onclick="showCart()">
+        🛒 Cart <span id="cartCount" class="cart-badge">0</span>
+    </div>
+
+    <div class="cart-sidebar" id="cartSidebar" style="display: none;">
+        <h2>Your Cart</h2>
+        <div id="cartItems"></div>
+        <h3 id="cartTotal"></h3>
+        <button class="checkout-btn" onclick="checkout()">Buy Now</button>
+        <button onclick="hideCart()">Close</button>
+    </div>
+
+    <script>
+        const API_URL = "http://localhost:3000/products";
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+        document.addEventListener('DOMContentLoaded', function () {
+            filterProducts('all');
+            updateCartCount();
+        });
+
+        async function filterProducts(category) {
+            try {
+                const response = await fetch(API_URL);
+                const allProducts = await response.json();
+
+                const searchQuery = document.getElementById('searchInput')?.value.toLowerCase() || '';
+                const filteredByCategory = category === 'all' ? allProducts : allProducts.filter(p => p.category === category);
+                const filtered = filteredByCategory.filter(p => p.name.toLowerCase().includes(searchQuery));
+
+                const container = document.getElementById('productContainer');
+
+                if (filtered.length === 0) {
+                    container.innerHTML = '<p>No products match your search.</p>';
+                    return;
+                }
+
+                container.innerHTML = filtered.map(product => `
+                    <div class="product-card">
+                        <img src="${product.image || 'https://via.placeholder.com/250'}" alt="${product.name}">
+                        <h3>${product.name}</h3>
+                        <p>${product.description || ''}</p>
+                        <p><strong>Price: ₹${product.price}</strong></p>
+                        <p>${product.quantity ? `Quantity: ${product.quantity}` : ''}</p>
+                        <p class="category-tag">${product.category}</p>
+                        <button class="add-btn" onclick="addToCart('${product.id}')">Add to Cart</button>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error("Error loading products:", error);
+                document.getElementById('productContainer').innerHTML = '<p>Error loading products.</p>';
+            }
+        }
+
+        async function addToCart(productId) {
+            const response = await fetch(`${API_URL}/${productId}`);
+            const product = await response.json();
+            const existing = cart.find(p => p.id === productId);
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                cart.push({ ...product, qty: 1 });
+            }
+            localStorage.setItem("cart", JSON.stringify(cart));
+            updateCartCount();
+            alert("Product added to cart");
+        }
+
+        function updateCartCount() {
+            const count = cart.reduce((sum, item) => sum + item.qty, 0);
+            document.getElementById("cartCount").innerText = count;
+        }
+
+        function showCart() {
+            const cartSidebar = document.getElementById("cartSidebar");
+            const cartItems = document.getElementById("cartItems");
+            const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+
+            cartItems.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                    <p><strong>${item.name}</strong></p>
+                    <p>Qty: ${item.qty}</p>
+                    <p>Price: ₹${item.price}</p>
+                    <p>Total: ₹${item.price * item.qty}</p>
+                    <button onclick="updateQuantity('${item.id}', -1)">-</button>
+                    <button onclick="updateQuantity('${item.id}', 1)">+</button>
+                    <button onclick="removeFromCart('${item.id}')">Remove</button>
+                </div>
+            `).join('');
+
+            document.getElementById("cartTotal").innerText = `Total: ₹${total}`;
+            cartSidebar.style.display = 'block';
+        }
+
+        function hideCart() {
+            document.getElementById("cartSidebar").style.display = 'none';
+        }
+
+        function updateQuantity(productId, change) {
+            const item = cart.find(p => p.id === productId);
+            if (!item) return;
+            item.qty += change;
+            if (item.qty <= 0) {
+                removeFromCart(productId);
+            } else {
+                localStorage.setItem("cart", JSON.stringify(cart));
+                updateCartCount();
+                showCart();
+            }
+        }
+
+        function removeFromCart(productId) {
+            const index = cart.findIndex(p => p.id === productId);
+            if (index > -1) {
+                cart.splice(index, 1);
+                localStorage.setItem("cart", JSON.stringify(cart));
+                updateCartCount();
+                showCart();
+            }
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                alert("Cart is empty");
+                return;
+            }
+            alert("Order placed successfully!");
+            cart.length = 0;
+            localStorage.removeItem("cart");
+            updateCartCount();
+            hideCart();
+        }
+    </script>
+</body>
+
+</html>
