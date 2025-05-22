@@ -7,11 +7,13 @@ const PORT = 3000;
 
 // MySQL Connection
 const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',        // XAMPP default has no password
-  database: 'shop'     // Your database name
+  host: 'db4free.net',
+  user: 'seemadbuser',
+  password: 'Seema@1234',
+  database: 'seemashopdb',
+  port: 3306
 });
+
 
 db.connect((err) => {
   if (err) {
@@ -81,6 +83,13 @@ app.delete('/products/:id', (req, res) => {
     res.status(204).send();
   });
 });
+app.get('/test-db', (req, res) => {
+  db.query('SELECT 1', (err, result) => {
+    if (err) return res.status(500).json({ error: 'Database not working' });
+    res.send('✅ Database connected and working!');
+  });
+});
+
 
 // Start server
 app.listen(PORT, () => {
