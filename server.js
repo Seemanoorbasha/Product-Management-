@@ -6,13 +6,15 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
+
 const db = mysql.createConnection({
-  host: 'db4free.net',
-  user: 'seemauser1',       // ✅ must match db4free signup
-  password: 'Seema@1234',   // ✅ must match
-  database: 'shop2025',     // ✅ must match
-  port: 3306
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT || 3306,
 });
+
 
 db.connect((err) => {
   if (err) {
