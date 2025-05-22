@@ -8,11 +8,12 @@ const PORT = 3000;
 // MySQL Connection
 const db = mysql.createConnection({
   host: 'db4free.net',
-  user: 'seemadbuser',
+  user: 'seemauser1',
   password: 'Seema@1234',
-  database: 'seemashopdb',
+  database: 'shop2025',
   port: 3306
 });
+
 
 
 db.connect((err) => {
