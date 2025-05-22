@@ -3,9 +3,10 @@ const cors = require('cors');
 const { v4: uuidv4 } = require('uuid');
 const mysql = require('mysql');
 const app = express();
-const PORT = 3000;
 
-// MySQL Connection
+const PORT = process.env.PORT || 3000;
+
+// Cloud MySQL connection
 const db = mysql.createConnection({
   host: 'db4free.net',
   user: 'seemauser1',
@@ -13,8 +14,6 @@ const db = mysql.createConnection({
   database: 'shop2025',
   port: 3306
 });
-
-
 
 db.connect((err) => {
   if (err) {
@@ -28,6 +27,27 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
+// Route to create products table
+app.get('/create-products-table', (req, res) => {
+  const sql = `
+    CREATE TABLE IF NOT EXISTS products (
+      id VARCHAR(255) PRIMARY KEY,
+      name VARCHAR(255),
+      price FLOAT,
+      image TEXT,
+      quantity VARCHAR(50),
+      category VARCHAR(100)
+    );
+  `;
+  db.query(sql, (err, result) => {
+    if (err) {
+      console.error('❌ Table creation error:', err.message);
+      return res.status(500).json({ error: 'Table creation failed', details: err.message });
+    }
+    res.send('✅ products table created successfully.');
+  });
+});
+
 // Get all products
 app.get('/products', (req, res) => {
   db.query('SELECT * FROM products', (err, results) => {
@@ -36,7 +56,7 @@ app.get('/products', (req, res) => {
   });
 });
 
-// Get single product by ID
+// Get single product
 app.get('/products/:id', (req, res) => {
   const { id } = req.params;
   db.query('SELECT * FROM products WHERE id = ?', [id], (err, results) => {
@@ -84,28 +104,8 @@ app.delete('/products/:id', (req, res) => {
     res.status(204).send();
   });
 });
-app.get('/create-products-table', (req, res) => {
-  const sql = `
-    CREATE TABLE IF NOT EXISTS products (
-      id VARCHAR(255) PRIMARY KEY,
-      name VARCHAR(255),
-      price FLOAT,
-      image TEXT,
-      quantity VARCHAR(50),
-      category VARCHAR(100)
-    );
-  `;
-  db.query(sql, (err, result) => {
-    if (err) {
-      console.error('Table creation error:', err);
-      return res.status(500).json({ error: 'Table creation failed' });
-    }
-    res.send('✅ products table created successfully.');
-  });
-});
 
+// Start server
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
-
-
