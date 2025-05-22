@@ -83,12 +83,26 @@ app.delete('/products/:id', (req, res) => {
     res.status(204).send();
   });
 });
-app.get('/test-db', (req, res) => {
-  db.query('SELECT 1', (err, result) => {
-    if (err) return res.status(500).json({ error: 'Database not working' });
-    res.send('✅ Database connected and working!');
+app.get('/create-products-table', (req, res) => {
+  const sql = `
+    CREATE TABLE IF NOT EXISTS products (
+      id VARCHAR(255) PRIMARY KEY,
+      name VARCHAR(255),
+      price FLOAT,
+      image TEXT,
+      quantity VARCHAR(50),
+      category VARCHAR(100)
+    );
+  `;
+  db.query(sql, (err, result) => {
+    if (err) {
+      console.error('Table creation error:', err);
+      return res.status(500).json({ error: 'Table creation failed' });
+    }
+    res.send('✅ products table created successfully.');
   });
 });
+
 
 
 // Start server
