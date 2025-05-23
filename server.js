@@ -8,10 +8,26 @@ const PORT = process.env.PORT || 3000;
 // Database connection
 const db = mysql.createConnection({
   host: process.env.MYSQLHOST,
-  port: process.env.MYSQLPORT || 3306,
+  port: parseInt(process.env.MYSQLPORT) || 3306, // Ensure port is a number
   user: process.env.MYSQLUSER,
   password: process.env.MYSQLPASSWORD,
   database: process.env.MYSQLDATABASE,
+  ssl: { rejectUnauthorized: false }, // Add SSL option
+  insecureAuth: true, // Allow older authentication
+});
+
+// Add this after connecting to MySQL
+db.query(`
+  CREATE TABLE IF NOT EXISTS products (
+    id VARCHAR(255) PRIMARY KEY,
+    name VARCHAR(255),
+    price FLOAT,
+    image TEXT,
+    quantity VARCHAR(50),
+    category VARCHAR(100)
+)`, (err) => {
+  if (err) console.error("❌ Table creation failed:", err);
+  else console.log("✅ Products table ready");
 });
 
 db.connect((err) => {
@@ -88,6 +104,6 @@ app.delete('/api/products/:id', (req, res) => {
   });
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
